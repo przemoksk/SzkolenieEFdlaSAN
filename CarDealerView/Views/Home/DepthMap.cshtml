@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewData["Title"] = "DepthMap";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>DepthMap</h1>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paint.js/5.2.4/pixi.min.js" integrity="sha256-5j/MTZ4A3D/1ZAeBTUrY5bKvNGvtp/ltP3Z9P9cTyVc=" crossorigin="anonymous"></script>
+<script>
+    let app = new PIXI.Application({ width: 1280, height: 1024 });
+
+    document.body.appendChild(app.view);
+    let img = new PIXI.Sprite.from("../images/mercedes.jpg");
+    img.width = 1280;
+    img.height = 1024;
+    img.interactive = true;
+
+    app.stage.addChild(img);
+    depthMap = new PIXI.Sprite.from("../images/mercedes-map.jpg");
+    app.stage.addChild(depthMap);
+
+    displacementFilter = new PIXI.filters.DisplacementFilter(depthMap);
+    app.stage.filters = [displacementFilter];
+
+
+    document.body.onmousemove = function (e) {
+        displacementFilter.scale.x = (1280 / 2 - e.clientX) / 20;
+        displacementFilter.scale.y = (1024 / 2 - e.clientY) / 20;
+    };
+</script>
